@@ -8,7 +8,7 @@ import java.util.Map;
 public interface Dispatcher {
 
     String INSTANCE_KEY_OF_BOUND_OPERATION = "__this";
-    String AUTHENTICATION_TOKEN_KEY_OF_BOUND_OPERATION = "__auth_token";
+    String PRINCIPAL_KEY = "__principal";
 
     /**
      * Call operation with a given exchange. Exchange contains request payload (with key of operation parameter name
