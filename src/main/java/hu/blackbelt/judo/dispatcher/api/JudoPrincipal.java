@@ -14,6 +14,10 @@ public class JudoPrincipal implements Principal {
     @NonNull
     private String name;
 
+    private String realm;
+
+    private String client;
+
     @NonNull
     private Map<String, Object> attributes;
 
