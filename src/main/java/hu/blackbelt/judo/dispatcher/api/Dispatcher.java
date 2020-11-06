@@ -9,6 +9,7 @@ public interface Dispatcher {
 
     String INSTANCE_KEY_OF_BOUND_OPERATION = "__this";
     String PRINCIPAL_KEY = "__principal";
+    String VARIABLES_KEY = "__variables";
 
     /**
      * Call operation with a given exchange. Exchange contains request payload (with key of operation parameter name
