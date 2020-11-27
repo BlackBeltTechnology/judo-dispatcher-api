@@ -8,7 +8,9 @@ import java.util.Map;
 public interface Dispatcher {
 
     String INSTANCE_KEY_OF_BOUND_OPERATION = "__this";
+    String ENTITY_TYPE_MAP_KEY = "__entityType";
     String PRINCIPAL_KEY = "__principal";
+    String ACTOR_KEY = "__actor";
     String VARIABLES_KEY = "__variables";
 
     /**
