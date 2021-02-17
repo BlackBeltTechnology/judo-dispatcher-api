@@ -12,6 +12,7 @@ public interface Dispatcher {
     String PRINCIPAL_KEY = "__principal";
     String ACTOR_KEY = "__actor";
     String VARIABLES_KEY = "__variables";
+    String HEADERS_KEY = "__headers";
 
     /**
      * Call operation with a given exchange. Exchange contains request payload (with key of operation parameter name
