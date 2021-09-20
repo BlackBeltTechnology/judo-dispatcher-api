@@ -44,7 +44,7 @@ public class FileType {
         if (size == null || size instanceof Long) {
             return (Long) size;
         } else {
-            return Long.parseLong(size.toString());
+            return Double.valueOf(size.toString()).longValue();
         }
     }
 
