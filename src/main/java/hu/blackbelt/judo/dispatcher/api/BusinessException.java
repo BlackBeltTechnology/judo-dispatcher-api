@@ -10,5 +10,7 @@ import java.util.Map;
 public class BusinessException extends RuntimeException {
 
     private final String type;
+    private final String errorCode;
     private final Map<String, Object> details;
+    private final Throwable throwable;
 }
