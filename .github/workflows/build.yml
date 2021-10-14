@@ -26,59 +26,9 @@ jobs:
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v4
         with:
-          servers: |-
-            [
-                {
-                    "id": "judong-nexus-mirror",
-                    "username": "${{ secrets.SECRET_TOKEN }}",
-                    "password": "${{ secrets.SECRET_TOKEN }}"
-                },
-                {
-                    "id": "judong-nexus-distribution",
-                    "username": "${{ secrets.SECRET_TOKEN }}",
-                    "password": "${{ secrets.SECRET_TOKEN }}"
-                }
-            ]
-
-          mirrors: |-
-            [
-                {
-                    "id": "judong-nexus-mirror",
-                    "mirrorOf": "*",
-                    "url": "https://nexus.judo.technology/repository/maven-judong/"
-                 }
-            ]
-
-          profiles: |-
-            [
-                {
-                    "id": "gpg",
-                    "name": "gpg",
-                    "activation": {
-                        "activeByDefault" : true
-                    },
-                    "properties": {
-                        "altReleaseDeploymentRepository": "dummy::default::file:///tmp/maven-release/"
-                        "gpg.keyname": "${{ secrets.GPG_KEYNAME }}"
-                        "gpg.passphrase": "${{ secrets.GPG_PASSPHRASE }}"
-                    }
-                },
-                {
-                    "id": "judong-release",
-                    "name": "judong-release",
-                    "properties": {
-                        "altReleaseDeploymentRepository": "releases::default::https://nexus.judo.technology/repository/maven-judong/"
-                    }
-                },
-                {
-                    "id": "dummy-release",
-                    "name": "dummy-release",
-                    "properties": {
-                        "altReleaseDeploymentRepository": "dummy::default::file:///tmp/maven-release/"
-                    }
-                }
-            ]
-
+          servers: '[{ "id": "judong-nexus-mirror", "username": "${{ secrets.SECRET_TOKEN }}", "password": "${{ secrets.SECRET_TOKEN }}" }, { "id": "judong-nexus-distribution", "username": "${{ secrets.SECRET_TOKEN }}", "password": "${{ secrets.SECRET_TOKEN }}" }]'
+          mirrors: '[ { "id": "judong-nexus-mirror", "mirrorOf": "*", "url": "https://nexus.judo.technology/repository/maven-judong/" } ]'
+          profiles: '[ { "id": "gpg", "name": "gpg", "activation": { "activeByDefault" : true }, "properties": { "altReleaseDeploymentRepository": "dummy::default::file:///tmp/maven-release/", "gpg.keyname": "${{ secrets.GPG_KEYNAME }}", "gpg.passphrase": "${{ secrets.GPG_PASSPHRASE }}" } }, { "id": "judong-release", "name": "judong-release", "properties": { "altReleaseDeploymentRepository": "releases::default::https://nexus.judo.technology/repository/maven-judong/"}}, { "id": "dummy-release", "name": "dummy-release", "properties": { "altReleaseDeploymentRepository": "dummy::default::file:///tmp/maven-release/" } } ]'
 
       - name: Cache Maven packages
         uses: actions/cache@v2
