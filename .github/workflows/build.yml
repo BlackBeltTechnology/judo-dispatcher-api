@@ -10,12 +10,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: judong
 
     steps:
 
       - uses: actions/checkout@v2
-
+      - uses: olafurpg/setup-gpg@v3
 #      - name: Restore Maven cache
 #        uses: skjolber/maven-cache-github-action@v1.1
 #        with:
@@ -36,7 +36,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2-
 
       - name: Setup GPG      
-        run: 
+        run: |-
           echo "$GPG_SECRET_KEYS" | base64 --decode | gpg --import --batch
           echo "$GPG_OWNERTRUST" | base64 --decode | gpg --import-ownertrust
         env:
@@ -44,35 +44,37 @@ jobs:
           GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
 
       - name: Calculate version number
+        id: version
         run: |-
           export TAG_NAME=$(echo "$GITHUB_REF" | cut -d ' ' -f2 | tr '#\/\.-' '_')
+          export SLUG=$(echo "${GITHUB_SHA}" | cut -c1-7)
           export BASE_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout | cut -d'-' -f 1)
+          export VERSION_NUMBER=${BASE_VERSION}.$(date +%Y%m%d_%H%M%S)_${SLUG}_${TAG_NAME//[(\)]}
           echo "Base version from POM: $BASE_VERSION"
-          export VERSION_NUMBER=${BASE_VERSION}.$(date +%Y%m%d_%H%M%S)_${GITHUB_SHA}_${TAG_NAME//[(\)]}
           echo "Building version: ${VERSION_NUMBER}"
-          echo "VERSION_NUMBER=$(echo $VERSION_NUMBER | cut -c 1-6)" >> $GITHUB_ENV
+          echo "VERSION_NUMBER=$(echo $VERSION_NUMBER)" >> $GITHUB_ENV
 
 
       - name: Build with Maven
-        run: ./mvnw deploy -Drevision=${VERSION_NUMBER} -Psign-artifacts,release-judong
+        run: ./mvnw -B -Dstyle.color=always -Drevision=${VERSION_NUMBER} -Psign-artifacts,release-judong install
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            **Branch:** 
-            ${env.WERCKER_GIT_BRANCH}
-            **Maven repository:** 
-            ${env.JUDONG_MAVEN_UPSTREAM_SNAPSHOT}/#browse/browse:maven-judo-release:hu%2Fblackbelt%2Feclipse%2F${project-shortname}
-            **Wercker:** 
-            https://app.wercker.com/${project-repositoryId}/runs/build/${env.WERCKER_RUN_ID}
-          draft: true
-          prerelease: false
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+#        with:
+#          tag_name: ${{ github.ref }}
+#          release_name: Release ${{ github.ref }}
+#          body: |
+#            **Branch:** 
+#            ${env.WERCKER_GIT_BRANCH}
+#            **Maven repository:** 
+#            ${env.JUDONG_MAVEN_UPSTREAM_SNAPSHOT}/#browse/browse:maven-judo-release:hu%2Fblackbelt%2Feclipse%2F${project-shortname}
+#            **Wercker:** 
+#            https://app.wercker.com/${project-repositoryId}/runs/build/${env.WERCKER_RUN_ID}
+#          draft: true
+#          prerelease: false
 
 
 #      # Save maven cache      
