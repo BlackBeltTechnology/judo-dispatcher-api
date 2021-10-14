@@ -87,7 +87,7 @@ jobs:
 
       - name: Setup GPG
         run: |-
-          echo "$GPG_SECRET_KEYS" | base64 --decode | gpg --import --batch
+          echo "$GPG_SECRET_KEYS" | base64 --decode | gpg --allow-secret-key-import --import --batch
           echo "$GPG_OWNERTRUST" | base64 --decode | gpg --import-ownertrust
         env:
           GPG_SECRET_KEYS: ${{ secrets.GPG_SECRET_KEYS }}
