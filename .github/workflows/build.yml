@@ -30,13 +30,13 @@ jobs:
             [
                 {
                     "id": "judong-nexus-mirror",
-                    "username": "${{ secrets.SECRET_TOKEN }}",
-                    "password": "${{ secrets.SECRET_TOKEN }}"
+                    "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
+                    "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 },
                 {
                     "id": "judong-nexus-distribution",
-                    "username": "${{ secrets.SECRET_TOKEN }}",
-                    "password": "${{ secrets.SECRET_TOKEN }}"
+                    "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
+                    "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 }
             ]
 
