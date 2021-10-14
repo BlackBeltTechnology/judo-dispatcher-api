@@ -16,17 +16,67 @@ jobs:
 
       - uses: actions/checkout@v2
       - uses: olafurpg/setup-gpg@v3
-#      - name: Restore Maven cache
-#        uses: skjolber/maven-cache-github-action@v1.1
-#        with:
-#          step: restore
 
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'zulu'
-#          cache: maven
+
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v4
+        with:
+          servers: |-
+            [
+                {
+                    "id": "judong-nexus-mirror",
+                    "username": "${{ secrets.SECRET_TOKEN }}",
+                    "password": "${{ secrets.SECRET_TOKEN }}"
+                },
+                {
+                    "id": "judong-nexus-distribution",
+                    "username": "${{ secrets.SECRET_TOKEN }}",
+                    "password": "${{ secrets.SECRET_TOKEN }}"
+                }
+            ]
+          mirrors: |-
+            [
+                {
+                    "id": "judong-nexus-mirror",
+                    "mirrorOf": "*",
+                    "url": "https://nexus.judo.technology/repository/maven-judong/"
+                 }
+            ]
+          profiles: |-
+            [
+                {
+                    "id": "gpg",
+                    "name": "gpg",
+                    "activation": {
+                        "activeByDefault" : true
+                    },
+                    "properties": {
+                        "altReleaseDeploymentRepository": "dummy::default::file:///tmp/maven-release/"
+                        "gpg.keyname": "${{ secrets.GPG_KEYNAME }}"
+                        "gpg.passphrase": "${{ secrets.GPG_PASSPHRASE }}"
+                    }
+                },
+                {
+                    "id": "judong-release",
+                    "name": "judong-release",
+                    "properties": {
+                        "altReleaseDeploymentRepository": "releases::default::https://nexus.judo.technology/repository/maven-judong/"
+                    }
+                },
+                {
+                    "id": "dummy-release",
+                    "name": "dummy-release",
+                    "properties": {
+                        "altReleaseDeploymentRepository": "dummy::default::file:///tmp/maven-release/"
+                    }
+                }
+            ]
+
 
       - name: Cache Maven packages
         uses: actions/cache@v2
@@ -35,7 +85,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2-
 
-      - name: Setup GPG      
+      - name: Setup GPG
         run: |-
           echo "$GPG_SECRET_KEYS" | base64 --decode | gpg --import --batch
           echo "$GPG_OWNERTRUST" | base64 --decode | gpg --import-ownertrust
@@ -53,7 +103,6 @@ jobs:
           echo "Base version from POM: $BASE_VERSION"
           echo "Building version: ${VERSION_NUMBER}"
           echo "VERSION_NUMBER=$(echo $VERSION_NUMBER)" >> $GITHUB_ENV
-
 
       - name: Build with Maven
         run: ./mvnw -B -Dstyle.color=always -Drevision=${VERSION_NUMBER} -Psign-artifacts,release-judong install
