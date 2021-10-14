@@ -22,7 +22,9 @@ jobs:
         with:
           java-version: '11'
           distribution: 'zulu'
-
+          gpg-private-key: ${{ secrets.GPG_SECRET_KEYS }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v20
         with:
@@ -52,17 +54,6 @@ jobs:
           profiles: >
             [
                 {
-                    "id": "gpg",
-                    "activation": {
-                        "activeByDefault" : "true"
-                    },
-                    "properties": {
-                        "altReleaseDeploymentRepository": "dummy::default::file:///tmp/maven-release/",
-                        "gpg.keyname": "${{ secrets.GPG_KEYNAME }}",
-                        "gpg.passphrase": "${{ secrets.GPG_PASSPHRASE }}"
-                    }
-                },
-                {
                     "id": "judong-release",
                     "properties": {
                         "altReleaseDeploymentRepository": "releases::default::https://nexus.judo.technology/repository/maven-judong/"
@@ -84,14 +75,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2-
 
-      - name: Setup GPG
-        run: |-
-          echo "$GPG_SECRET_KEYS" | base64 --decode | gpg --allow-secret-key-import --import --batch
-          echo "$GPG_OWNERTRUST" | base64 --decode | gpg --import-ownertrust
-        env:
-          GPG_SECRET_KEYS: ${{ secrets.GPG_SECRET_KEYS }}
-          GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
-
       - name: Calculate version number
         id: version
         run: |-
@@ -103,8 +86,11 @@ jobs:
           echo "Building version: ${VERSION_NUMBER}"
           echo "VERSION_NUMBER=$(echo $VERSION_NUMBER)" >> $GITHUB_ENV
 
+      - name: Cat maven settings
+        run: cat /root/.m2/settings.xml
+
       - name: Build with Maven
-        run: ./mvnw -B -Dstyle.color=always -Drevision=${VERSION_NUMBER} -Pjudong-release install
+        run: ./mvnw -B -Dstyle.color=always -Drevision=${VERSION_NUMBER} -Psign-artifacts,judong-release install
 
 #      - name: Create Release
 #        id: create_release
