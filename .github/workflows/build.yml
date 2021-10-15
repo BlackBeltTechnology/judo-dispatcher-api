@@ -99,15 +99,17 @@ jobs:
       - name: Create success message
         if: ${{ !failure() }}
         run: |-
+          MSG=$(git log --format=%B -n 1 ${{github.event.after}})
           echo ":check_mark_button: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
           echo "Version: $VERSION_NUMBER" >> build.msg
-          echo "Commit: ${{ github.event.head_commit.message }}" >> build.msg
+          echo "Commit: $MSG >> build.msg
           
       - name: Create faliure message
         if: ${{ failure() }}
         run: |-
+          MSG=$(git log --format=%B -n 1 ${{github.event.after}})
           echo ":cross_mark: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
-          echo "Commit: ${{ github.event.head_commit.message }}" >> build.msg
+          echo "Commit: $MSG >> build.msg
 
       - name: Send message to skype
         uses: Eloco/docker-action-send-skype@v2
