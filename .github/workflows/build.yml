@@ -102,13 +102,13 @@ jobs:
         run: |-
           echo ":check_mark_button: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
           echo "Version: $VERSION_NUMBER" >> build.msg
-          echo "Commit: ${{ steps.log.outputs.message }} >> build.msg
+          echo "Commit: ${{ steps.log.outputs.message }}" >> build.msg
           
       - name: Create faliure message
         if: ${{ failure() }}
         run: |-
           echo ":cross_mark: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
-          echo "Commit: ${{ steps.log.outputs.message }} >> build.msg
+          echo "Commit: ${{ steps.log.outputs.message }}" >> build.msg
 
       - name: Send message to skype
         uses: Eloco/docker-action-send-skype@v2
