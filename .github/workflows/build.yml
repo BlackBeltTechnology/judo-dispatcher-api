@@ -105,7 +105,6 @@ jobs:
           ./mvnw -B -Dstyle.color=always \
           -Drevision=${{ needs.init.outputs.version }} \
           -Psign-artifacts,release-judong \
-          -X \
           deploy
           
       - name: Create success message
