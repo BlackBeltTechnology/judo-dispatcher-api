@@ -93,12 +93,18 @@ jobs:
             [
                 {
                     "id": "judong-release",
+                    "activation": {
+                        "activeByDefault": "false"
+                    },
                     "properties": {
                         "altDeploymentRepository": "judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/"
                     }
                 },
                 {
                     "id": "dummy-release",
+                    "activation": {
+                        "activeByDefault": "false"
+                    },
                     "properties": {
                         "altDeploymentRepository": "dummy::file:///tmp/maven-release/"
                     }
@@ -121,7 +127,6 @@ jobs:
           ./mvnw -B -Dstyle.color=always \
           -Drevision=${{ needs.init.outputs.version }} \
           -Psign-artifacts,judong-release \
-          -DaltDeploymentRepository:judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/ \
           deploy
           
       - name: Create success message
