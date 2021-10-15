@@ -74,7 +74,7 @@ jobs:
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 },
                 {
-                    "id": "judong-nexus-distribution",
+                    "id": "judong-nexus-distribution::default",
                     "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 }
@@ -97,7 +97,7 @@ jobs:
                         "activeByDefault": "false"
                     },
                     "properties": {
-                        "altDeploymentRepository": "judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/"
+                        "altDeploymentRepository": "judong-nexus-distribution::default::https://nexus.judo.technology/repository/maven-judong/"
                     }
                 },
                 {
@@ -106,7 +106,7 @@ jobs:
                         "activeByDefault": "false"
                     },
                     "properties": {
-                        "altDeploymentRepository": "dummy::file:///tmp/maven-release/"
+                        "altDeploymentRepository": "dummy::default::file:///tmp/maven-release/"
                     }
                 }
             ]
@@ -127,6 +127,7 @@ jobs:
           ./mvnw -B -Dstyle.color=always \
           -Drevision=${{ needs.init.outputs.version }} \
           -Psign-artifacts,judong-release \
+          -X \
           deploy
           
       - name: Create success message
