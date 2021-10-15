@@ -94,13 +94,13 @@ jobs:
                 {
                     "id": "judong-release",
                     "properties": {
-                        "altReleaseDeploymentRepository": "judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/"
+                        "altDeploymentRepository": "judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/"
                     }
                 },
                 {
                     "id": "dummy-release",
                     "properties": {
-                        "altReleaseDeploymentRepository": "dummy::file:///tmp/maven-release/"
+                        "altDeploymentRepository": "dummy::file:///tmp/maven-release/"
                     }
                 }
             ]
