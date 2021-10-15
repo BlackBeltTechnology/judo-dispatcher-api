@@ -117,8 +117,7 @@ jobs:
         run: |-
           ./mvnw -B -Dstyle.color=always \
           -Drevision=${{ needs.init.outputs.version }} \
-          -Psign-artifacts \
-          -DaltDeploymentRepository:judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/ \
+          -Psign-artifacts,judong-release \
           deploy
           
       - name: Create success message
