@@ -94,7 +94,7 @@ jobs:
                 {
                     "id": "judong-release",
                     "properties": {
-                        "altReleaseDeploymentRepository": "releases::default::https://nexus.judo.technology/repository/maven-judong/"
+                        "altReleaseDeploymentRepository": "judong-nexus-distribution::default::https://nexus.judo.technology/repository/maven-judong/"
                     }
                 },
                 {
