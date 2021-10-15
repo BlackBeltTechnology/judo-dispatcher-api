@@ -62,6 +62,9 @@ jobs:
           distribution: 'zulu'
           gpg-private-key: ${{ secrets.GPG_SECRET_KEYS }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Remove settings.xml
+        run: rm /root/.m2/settings.xml
           
       - name: Setup maven settings.xml
         uses: whelk-io/maven-settings-xml-action@v20
