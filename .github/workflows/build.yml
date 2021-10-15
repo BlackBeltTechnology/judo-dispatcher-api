@@ -75,10 +75,32 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2-
 
+      # In case of a push event, the commit we care about is simply HEAD.
+      # The current branch name can be found by parsing GITHUB_REF, for example,
+      # if we are on the master branch, then GITHUB_REF = refs/heads/master.
+      - name: Get commit branch and commit message
+        if: github.event_name == 'push'
+        run: |
+          echo "COMMIT_BRANCH=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
+          echo "$(git log --format=%B -n 1 HEAD)" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # In case of a pull_request event, the commit we care about is HEAD^2, that
+      # is, the second parent of the pull request merge commit.
+      # The current branch name is directly given by GITHUB_HEAD_REF
+      - name: Get commit branch and commit message
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "COMMIT_BRANCH=$GITHUB_HEAD_REF" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
+          echo "$(git log --format=%B -n 1 HEAD^2)" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+        
       - name: Calculate version number
         id: version
         run: |-
-          export TAG_NAME=$(echo "$GITHUB_REF" | cut -d ' ' -f2 | tr '#\/\.-' '_')
+          export TAG_NAME=$(echo "$COMMIT_BRANCH" | cut -d ' ' -f2 | tr '#\/\.-' '_')
           export SLUG=$(echo "${GITHUB_SHA}" | cut -c1-7)
           export BASE_VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout | cut -d'-' -f 1)
           export VERSION_NUMBER=${BASE_VERSION}.$(date +%Y%m%d_%H%M%S)_${SLUG}_${TAG_NAME//[(\)]}
@@ -99,11 +121,14 @@ jobs:
         if: ${{ !failure() }}
         run: |-
           echo ":check_mark_button: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
+          echo "Version: $VERSION_NUMBER"
+          echo "$COMMIT_MESSAGE" >> build.msg
 
       - name: Create faliure message
         if: ${{ failure() }}
         run: |-
           echo ":cross_mark: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
+          echo "$COMMIT_MESSAGE" >> build.msg
 
       - name: Send message to skype
         uses: Eloco/docker-action-send-skype@v2
