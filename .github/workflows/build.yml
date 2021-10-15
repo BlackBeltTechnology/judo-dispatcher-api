@@ -15,7 +15,8 @@ jobs:
     steps:
 
       - uses: actions/checkout@v2
-#      - uses: olafurpg/setup-gpg@v3
+      - id: log
+        run: echo "::set-output name=message::$(git log --no-merges -1 --oneline)"
 
       - name: Set up JDK 11
         uses: actions/setup-java@v2
@@ -87,8 +88,8 @@ jobs:
           echo "Building version: ${VERSION_NUMBER}"
           echo "VERSION_NUMBER=$(echo $VERSION_NUMBER)" >> $GITHUB_ENV
 
-      - name: Cat maven settings
-        run: cat /root/.m2/settings.xml
+#      - name: Cat maven settings
+#        run: cat /root/.m2/settings.xml
 
       - name: List GPG keys
         run: gpg --list-keys
@@ -101,15 +102,13 @@ jobs:
         run: |-
           echo ":check_mark_button: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
           echo "Version: $VERSION_NUMBER" >> build.msg
-          MSG=$(git log --format=%B -n 1 ${{github.event.after}})
-          echo "Commit: $MSG >> build.msg
+          echo "Commit: ${{ steps.log.outputs.message }} >> build.msg
           
       - name: Create faliure message
         if: ${{ failure() }}
         run: |-
           echo ":cross_mark: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
-          MSG=$(git log --format=%B -n 1 ${{github.event.after}})
-          echo "Commit: $MSG >> build.msg
+          echo "Commit: ${{ steps.log.outputs.message }} >> build.msg
 
       - name: Send message to skype
         uses: Eloco/docker-action-send-skype@v2
