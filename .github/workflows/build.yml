@@ -15,8 +15,11 @@ jobs:
     steps:
 
       - uses: actions/checkout@v2
-      - id: log
-        run: echo "::set-output name=message::$(git log --no-merges -1 --oneline)"
+        with:
+          token: ${{ secrets.YOUR_GITHUB_TOKEN }}
+          fetch-depth: 2
+      - id: project
+        uses: zero88/gh-project-context@v1.1
 
       - name: Set up JDK 11
         uses: actions/setup-java@v2
@@ -102,13 +105,13 @@ jobs:
         run: |-
           echo ":check_mark_button: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
           echo "Version: $VERSION_NUMBER" >> build.msg
-          echo "Commit: ${{ steps.log.outputs.message }}" >> build.msg
+          echo "Commit: ${{ steps.log.outputs.commitMsg }}" >> build.msg
           
       - name: Create faliure message
         if: ${{ failure() }}
         run: |-
           echo ":cross_mark: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > build.msg
-          echo "Commit: ${{ steps.log.outputs.message }}" >> build.msg
+          echo "Commit: ${{ steps.log.outputs.commitMsg }}" >> build.msg
 
       - name: Send message to skype
         uses: Eloco/docker-action-send-skype@v2
