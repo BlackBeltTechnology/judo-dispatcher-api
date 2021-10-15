@@ -110,7 +110,7 @@ jobs:
         with:
           skype_username: ${{ secrets.SKYPE_USERNAME }}
           skype_password: ${{ secrets.SKYPE_PASSWORD }}
-          skype_ids: ${{ secrets.SKYPE_JUDONG_GROUP }}
+          skype_ids: 19:453c1f8dd6f04726b767c37efd80341f@thread.skype
           send_msg_path: ${{ runner.temp }}/build.msg
 #          send_file_path : download/
 
