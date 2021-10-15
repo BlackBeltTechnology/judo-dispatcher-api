@@ -69,12 +69,7 @@ jobs:
           servers: >
             [
                 {
-                    "id": "judong-nexus-mirror",
-                    "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
-                    "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
-                },
-                {
-                    "id": "judong-nexus-relases",
+                    "id": "judong",
                     "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 }
@@ -83,7 +78,7 @@ jobs:
           mirrors: >
             [
                 {
-                    "id": "judong-nexus-mirror",
+                    "id": "judong",
                     "mirrorOf": "*",
                     "url": "https://nexus.judo.technology/repository/maven-judong/"
                  }
@@ -94,13 +89,13 @@ jobs:
                 {
                     "id": "judong-release",
                     "properties": {
-                        "altDeploymentRepository": "judong-nexus-relases::default::https://nexus.judo.technology/repository/maven-judong/"
+                        "altDeploymentRepository": "judong::https://nexus.judo.technology/repository/maven-judong/"
                     }
                 },
                 {
                     "id": "dummy-release",
                     "properties": {
-                        "altDeploymentRepository": "dummy::default::file:///tmp/maven-release/"
+                        "altDeploymentRepository": "dummy::file:///tmp/maven-release/"
                     }
                 }
             ]
