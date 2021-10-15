@@ -98,20 +98,20 @@ jobs:
       - name: Create success message
         if: ${{ !failure() }}
         run: |-
-          echo ":check_mark_button: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > $RUNNER_TEMP/build.msg
+          echo ":check_mark_button: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > ${{ runner.temp }}/build.msg
 
       - name: Create faliure message
         if: ${{ failure() }}
         run: |-
-          echo ":cross_mark: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > $RUNNER_TEMP/build.msg
+          echo ":cross_mark: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > ${{ runner.temp }}/build.msg
 
       - name: Send message to skype
         uses: Eloco/docker-action-send-skype@v2
         with:
-          skype_username : ${{ secrets.SKYPE_USERNAME }}
-          skype_password : ${{ secrets.SKYPE_PASSWORD }}
-          skype_ids      : ${{ secrets.SKYPE_JUDONG_GROUP }}
-          send_msg_path  : $RUNNER_TEMP/build.msg
+          skype_username: ${{ secrets.SKYPE_USERNAME }}
+          skype_password: ${{ secrets.SKYPE_PASSWORD }}
+          skype_ids: ${{ secrets.SKYPE_JUDONG_GROUP }}
+          send_msg_path: ${{ runner.temp }}/build.msg
 #          send_file_path : download/
 
 #      - name: Create Release
