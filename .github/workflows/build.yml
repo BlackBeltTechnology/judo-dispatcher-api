@@ -79,7 +79,6 @@ jobs:
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 }
             ]
-
           mirrors: >
             [
                 {
@@ -88,29 +87,6 @@ jobs:
                     "url": "https://nexus.judo.technology/repository/maven-judong/"
                  }
             ]
-
-          profiles: >
-            [
-                {
-                    "id": "judong-release",
-                    "activation": {
-                        "activeByDefault": "false"
-                    },
-                    "properties": {
-                        "altDeploymentRepository": "judong-nexus-distribution::default::https://nexus.judo.technology/repository/maven-judong/"
-                    }
-                },
-                {
-                    "id": "dummy-release",
-                    "activation": {
-                        "activeByDefault": "false"
-                    },
-                    "properties": {
-                        "altDeploymentRepository": "dummy::default::file:///tmp/maven-release/"
-                    }
-                }
-            ]
-
 
       - name: Print settings.xml
         run: cat /root/.m2/settings.xml
@@ -126,7 +102,7 @@ jobs:
         run: |-
           ./mvnw -B -Dstyle.color=always \
           -Drevision=${{ needs.init.outputs.version }} \
-          -Psign-artifacts,judong-release \
+          -Psign-artifacts,release-judong \
           -X \
           deploy
           
