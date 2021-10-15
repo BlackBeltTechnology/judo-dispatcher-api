@@ -69,7 +69,12 @@ jobs:
           servers: >
             [
                 {
-                    "id": "judong",
+                    "id": "judong-nexus-mirror",
+                    "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
+                    "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
+                },
+                {
+                    "id": "judong-nexus-distribution",
                     "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 }
@@ -78,30 +83,28 @@ jobs:
           mirrors: >
             [
                 {
-                    "id": "judong",
+                    "id": "judong-nexus-mirror",
                     "mirrorOf": "*",
                     "url": "https://nexus.judo.technology/repository/maven-judong/"
                  }
             ]
 
-#          profiles: >
-#            [
-#                {
-#                    "id": "judong-release",
-#                    "properties": {
-#                        "altDeploymentRepository": "judong::https://nexus.judo.technology/repository/maven-judong/"
-#                    }
-#                },
-#                {
-#                    "id": "dummy-release",
-#                    "properties": {
-#                        "altDeploymentRepository": "dummy::file:///tmp/maven-release/"
-#                    }
-#                }
-#            ]
+          profiles: >
+            [
+                {
+                    "id": "judong-release",
+                    "properties": {
+                        "altReleaseDeploymentRepository": "judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/"
+                    }
+                },
+                {
+                    "id": "dummy-release",
+                    "properties": {
+                        "altReleaseDeploymentRepository": "dummy::file:///tmp/maven-release/"
+                    }
+                }
+            ]
 
-      - name: Cat maven settings
-        run: cat /root/.m2/settings.xml
 
       - name: Cache Maven packages
         uses: actions/cache@v2
@@ -115,9 +118,9 @@ jobs:
           ./mvnw -B -Dstyle.color=always \
           -Drevision=${{ needs.init.outputs.version }} \
           -Psign-artifacts \
-          -DaltDeploymentRepository: judong::https://nexus.judo.technology/repository/maven-judong/
+          -DaltDeploymentRepository:judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/
           deploy
-
+          
       - name: Create success message
         if: ${{ !failure() }}
         run: |-
