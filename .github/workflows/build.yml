@@ -106,6 +106,9 @@ jobs:
             ]
 
 
+      - name: Print settings.xml
+        run: cat /root/.m2/settings.xml
+
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -118,6 +121,7 @@ jobs:
           ./mvnw -B -Dstyle.color=always \
           -Drevision=${{ needs.init.outputs.version }} \
           -Psign-artifacts,judong-release \
+          -DaltDeploymentRepository:judong-nexus-distribution::https://nexus.judo.technology/repository/maven-judong/ \
           deploy
           
       - name: Create success message
