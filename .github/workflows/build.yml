@@ -74,7 +74,7 @@ jobs:
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 },
                 {
-                    "id": "judong-nexus-distribution::default",
+                    "id": "judong-nexus-distribution",
                     "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 }
