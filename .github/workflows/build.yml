@@ -74,7 +74,7 @@ jobs:
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 },
                 {
-                    "id": "judong-nexus-distribution",
+                    "id": "releases",
                     "username": "${{ secrets.JUDONG_NEXUS_USERNAME }}",
                     "password": "${{ secrets.JUDONG_NEXUS_PASSWORD }}"
                 }
@@ -94,7 +94,7 @@ jobs:
                 {
                     "id": "judong-release",
                     "properties": {
-                        "altReleaseDeploymentRepository": "judong-nexus-distribution::default::https://nexus.judo.technology/repository/maven-judong/"
+                        "altReleaseDeploymentRepository": "releases::default::https://nexus.judo.technology/repository/maven-judong/"
                     }
                 },
                 {
