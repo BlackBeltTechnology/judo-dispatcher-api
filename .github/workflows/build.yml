@@ -113,6 +113,7 @@ jobs:
 
       - name: Send message to skype
         uses: Eloco/docker-action-send-skype@v2
+        if: always()
         with:
           skype_username: ${{ secrets.SKYPE_USERNAME }}
           skype_password: ${{ secrets.SKYPE_PASSWORD }}
