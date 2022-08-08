@@ -1,2 +1,18 @@
-# judo-dispatcher-api
+= judo-dispatcher-api
 
+image::https://github.com/BlackBeltTechnology/judo-dispatcher-api/actions/workflows/build.yml/badge.svg?branch=develop[link="https://github.com/BlackBeltTechnology/judo-dispatcher-api/actions/workflows/build.yml" float="center"]
+
+== Introduction
+
+The role of the Dispatcher is to route incoming API calls to the appropriate action. These actions can be recursive
+Dispatcher calls in case of nested payloads or direct database calls.
+
+It also handles mapping and validation of inputs.
+
+== Contributing to the project
+
+Everyone is welcome to contribute to JUDO! As a starter, please read the corresponding link:CONTRIBUTING.adoc[CONTRIBUTING] guide for details!
+
+== License
+
+This project is licensed under the https://www.eclipse.org/legal/epl-2.0/[Eclipse Public License - v 2.0].
