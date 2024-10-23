@@ -23,6 +23,7 @@ package hu.blackbelt.judo.dispatcher.api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Locale;
 import java.util.Map;
 
 @Getter
@@ -33,4 +34,5 @@ public class BusinessException extends RuntimeException {
     private final String errorCode;
     private final Map<String, Object> details;
     private final Throwable throwable;
+    private final Locale locale;
 }
