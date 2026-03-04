@@ -1,0 +1,40 @@
+# JUDO Dispatcher API
+
+> Defines the core API contracts (interfaces, annotations, and model classes) for the JUDO Dispatcher component, which routes incoming API calls to appropriate actions in the JUDO-NG runtime platform.
+
+Key facts:
+- Java 21 single-module Maven project built with Maven Wrapper (`./mvnw`)
+- Pure API library — interfaces and model classes only, no implementations
+- Core interfaces: `Dispatcher`, `Context`, `Sequence`, `VariableResolver`
+- Model classes: `JudoPrincipal`, `BusinessException`, `FileType`; annotation: `@JudoOperation`
+- Packaged as an OSGi bundle; depends on Eclipse EMF, Guava, Gson, Lombok, SLF4J
+- Part of the [judo-community](https://github.com/BlackBeltTechnology/judo-community) ecosystem
+- License: Eclipse Public License 2.0 (EPL-2.0)
+
+## Docs
+
+- [README.md](README.md): Project overview with API diagrams, build instructions, and Maven profiles
+- [AGENTS.md](AGENTS.md): Developer guide with build commands, project structure, and coding conventions
+- [CONTRIBUTING.md](CONTRIBUTING.md): Contribution guidelines and development workflow
+- [.github/CIFLOW.md](.github/CIFLOW.md): CI/CD pipeline and branching strategy documentation
+
+## Source — API Interfaces
+
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/Dispatcher.java](src/main/java/hu/blackbelt/judo/dispatcher/api/Dispatcher.java): Routes API calls to operations via `callOperation()`; defines exchange model keys and type coercion
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/Context.java](src/main/java/hu/blackbelt/judo/dispatcher/api/Context.java): Thread-safe key-value store for passing state through dispatch chains
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/Sequence.java](src/main/java/hu/blackbelt/judo/dispatcher/api/Sequence.java): Generates sequential values (counters, IDs) by name
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/VariableResolver.java](src/main/java/hu/blackbelt/judo/dispatcher/api/VariableResolver.java): Resolves typed environment variables by category and key
+
+## Source — Model Classes and Annotation
+
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/JudoPrincipal.java](src/main/java/hu/blackbelt/judo/dispatcher/api/JudoPrincipal.java): Security principal with name, realm, client, and attributes map
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/BusinessException.java](src/main/java/hu/blackbelt/judo/dispatcher/api/BusinessException.java): Domain exception with type, error code, details map, and locale
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/FileType.java](src/main/java/hu/blackbelt/judo/dispatcher/api/FileType.java): File metadata container (ID, filename, size, MIME type)
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/JudoOperation.java](src/main/java/hu/blackbelt/judo/dispatcher/api/JudoOperation.java): Runtime-retained annotation marking Dispatcher operations with a fully qualified name
+
+## Optional
+
+- [.github/workflows/build.yml](.github/workflows/build.yml): Main CI/CD pipeline (build, deploy, release)
+- [.github/workflows/release.yml](.github/workflows/release.yml): Manual release trigger workflow
+- [LICENSE.txt](LICENSE.txt): Eclipse Public License 2.0 full text
+- [pom.xml](pom.xml): Maven build definition with dependencies, plugins, and profiles
