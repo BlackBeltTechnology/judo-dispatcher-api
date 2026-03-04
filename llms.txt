@@ -32,6 +32,21 @@ Key facts:
 - [src/main/java/hu/blackbelt/judo/dispatcher/api/FileType.java](src/main/java/hu/blackbelt/judo/dispatcher/api/FileType.java): File metadata container (ID, filename, size, MIME type)
 - [src/main/java/hu/blackbelt/judo/dispatcher/api/JudoOperation.java](src/main/java/hu/blackbelt/judo/dispatcher/api/JudoOperation.java): Runtime-retained annotation marking Dispatcher operations with a fully qualified name
 
+## Used by
+
+- [judo-operation-utils](../judo-operation-utils): runtime/judo-operation-utils
+- [judo-platform](../judo-platform): runtime/judo-platform
+- [judo-runtime-core](../judo-runtime-core): runtime/judo-runtime-core
+- [judo-runtime-core-jsl](../judo-runtime-core-jsl): runtime/judo-runtime-core-jsl
+- [judo-services](../judo-services): runtime/judo-services
+- [judo-tatami](../judo-tatami): runtime/judo-tatami
+- [judo-tatami-base](../judo-tatami-base): runtime/judo-tatami-base
+- [judo-tatami-jsl](../judo-tatami-jsl): runtime/judo-tatami-jsl
+- [judo-psm-generator-jaxrs](../../template/judo-psm-generator-jaxrs): template/judo-psm-generator-jaxrs
+- [judo-psm-generator-report](../../template/judo-psm-generator-report): template/judo-psm-generator-report
+- [judo-psm-generator-restassured](../../template/judo-psm-generator-restassured): template/judo-psm-generator-restassured
+- [judo-psm-generator-sdk-core](../../template/judo-psm-generator-sdk-core): template/judo-psm-generator-sdk-core
+
 ## Optional
 
 - [.github/workflows/build.yml](.github/workflows/build.yml): Main CI/CD pipeline (build, deploy, release)
