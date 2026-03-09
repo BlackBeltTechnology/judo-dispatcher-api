@@ -1,0 +1,55 @@
+# JUDO Dispatcher API
+
+> Defines the core API contracts (interfaces, annotations, and model classes) for the JUDO Dispatcher component, which routes incoming API calls to appropriate actions in the JUDO-NG runtime platform.
+
+Key facts:
+- Java 21 single-module Maven project built with Maven Wrapper (`./mvnw`)
+- Pure API library — interfaces and model classes only, no implementations
+- Core interfaces: `Dispatcher`, `Context`, `Sequence`, `VariableResolver`
+- Model classes: `JudoPrincipal`, `BusinessException`, `FileType`; annotation: `@JudoOperation`
+- Packaged as an OSGi bundle; depends on Eclipse EMF, Guava, Gson, Lombok, SLF4J
+- Part of the [judo-community](https://github.com/BlackBeltTechnology/judo-community) ecosystem
+- License: Eclipse Public License 2.0 (EPL-2.0)
+
+## Docs
+
+- [README.md](README.md): Project overview with API diagrams, build instructions, and Maven profiles
+- [AGENTS.md](AGENTS.md): Developer guide with build commands, project structure, and coding conventions
+- [CONTRIBUTING.md](CONTRIBUTING.md): Contribution guidelines and development workflow
+- [.github/CIFLOW.md](.github/CIFLOW.md): CI/CD pipeline and branching strategy documentation
+
+## Source — API Interfaces
+
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/Dispatcher.java](src/main/java/hu/blackbelt/judo/dispatcher/api/Dispatcher.java): Routes API calls to operations via `callOperation()`; defines exchange model keys and type coercion
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/Context.java](src/main/java/hu/blackbelt/judo/dispatcher/api/Context.java): Thread-safe key-value store for passing state through dispatch chains
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/Sequence.java](src/main/java/hu/blackbelt/judo/dispatcher/api/Sequence.java): Generates sequential values (counters, IDs) by name
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/VariableResolver.java](src/main/java/hu/blackbelt/judo/dispatcher/api/VariableResolver.java): Resolves typed environment variables by category and key
+
+## Source — Model Classes and Annotation
+
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/JudoPrincipal.java](src/main/java/hu/blackbelt/judo/dispatcher/api/JudoPrincipal.java): Security principal with name, realm, client, and attributes map
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/BusinessException.java](src/main/java/hu/blackbelt/judo/dispatcher/api/BusinessException.java): Domain exception with type, error code, details map, and locale
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/FileType.java](src/main/java/hu/blackbelt/judo/dispatcher/api/FileType.java): File metadata container (ID, filename, size, MIME type)
+- [src/main/java/hu/blackbelt/judo/dispatcher/api/JudoOperation.java](src/main/java/hu/blackbelt/judo/dispatcher/api/JudoOperation.java): Runtime-retained annotation marking Dispatcher operations with a fully qualified name
+
+## Used by
+
+- [judo-operation-utils](../judo-operation-utils): Base classes and collection operations for generated operation scripts
+- [judo-platform](../judo-platform): Model-driven OSGi runtime platform with REST APIs and Karaf deployment
+- [judo-runtime-core](../judo-runtime-core): Multi-module runtime engine — data access, business logic, REST, and security
+- [judo-runtime-core-jsl](../judo-runtime-core-jsl): JSL support for runtime core — model parsing through to DAOs and schema
+- [judo-services](../judo-services): OSGi runtime services enabling multiple data models in a single Karaf container
+- [judo-tatami](../judo-tatami): Model transformation pipeline — ESM/PSM to deployable application artifacts
+- [judo-tatami-base](../judo-tatami-base): PSM transformation pipeline — models to schemas, expressions, and configurations
+- [judo-tatami-jsl](../judo-tatami-jsl): JSL-to-runtime model transformation engine (PSM, ASM, UI, RDBMS, etc.)
+- [judo-psm-generator-jaxrs](../../template/judo-psm-generator-jaxrs): Generates JAX-RS interfaces, DTOs, and service implementations from PSM
+- [judo-psm-generator-report](../../template/judo-psm-generator-report): Generates JasperReports reporting solutions from PSM models
+- [judo-psm-generator-restassured](../../template/judo-psm-generator-restassured): Generates REST Assured test API clients from PSM
+- [judo-psm-generator-sdk-core](../../template/judo-psm-generator-sdk-core): Generates SDK core layer — DAOs, DTOs, builders, and DI wiring from PSM
+
+## Optional
+
+- [.github/workflows/build.yml](.github/workflows/build.yml): Main CI/CD pipeline (build, deploy, release)
+- [.github/workflows/release.yml](.github/workflows/release.yml): Manual release trigger workflow
+- [LICENSE.txt](LICENSE.txt): Eclipse Public License 2.0 full text
+- [pom.xml](pom.xml): Maven build definition with dependencies, plugins, and profiles
